@@ -1,44 +1,28 @@
-import React, { useState } from 'react';
+
+import React from 'react';
+import { VStack, List, Text } from '@chakra-ui/react';
 import TodoItem from './TodoItem';
-import AddTodoForm from './AddTodoForm';
 
-export default function TodoList() {
-  const [todos, setTodos] = useState([]);
-
-  const addTodo = (title) => {
-    const newTodo = {
-      id: Date.now(),
-      title,
-      completed: false
-    };
-    setTodos([...todos, newTodo]);
-  };
-
-  const toggleTodo = (id) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
-  };
-
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
+function TodoList({ todos, toggleTodo, deleteTodo, updateTodo }) {
+  if (todos.length === 0) {
+    return <Text textAlign="center" color="gray.500">Tidak ada tugas. Tambahkan tugas baru!</Text>;
+  }
 
   return (
-    <div>
-      <h1>Daftar Tugas</h1>
-      <AddTodoForm onAddTodo={addTodo} />
-      <ul>
-        {todos.map(todo => (
+    <VStack spacing={4} align="stretch">
+      <List spacing={3}>
+        {todos.map((todo) => (
           <TodoItem
-            key={todo.id}
+            key={todo._id}
             todo={todo}
-            onToggle={toggleTodo}
-            onDelete={deleteTodo}
+            toggleTodo={toggleTodo}
+            deleteTodo={deleteTodo}
+            updateTodo={updateTodo}
           />
         ))}
-      </ul>
-    </div>
+      </List>
+    </VStack>
   );
-};
+}
 
+export default TodoList;
